@@ -38,7 +38,7 @@ def generate_letter_A():
     return np.array(A_pattern)
 
 # Generar 50 patrones de la letra A con ruido
-def generate_noisy_patterns(base_pattern, num_patterns=50, noise_level=0.1):
+def generate_noisy_patterns(base_pattern, num_patterns, noise_level):
     noisy_patterns = []
     for _ in range(num_patterns):
         noisy_pattern = base_pattern.copy()
@@ -51,22 +51,31 @@ def generate_noisy_patterns(base_pattern, num_patterns=50, noise_level=0.1):
 num_neurons = 100
 hopfield_net = HopfieldNetwork(num_neurons)
 
+# Gene patron random similar a la letra A para probar
+def generated_random_pattern(base_pattern, noise_level):
+    noisy_pattern = base_pattern.copy()
+    noise = np.random.choice([0, 1], size=base_pattern.shape, p=[1 - noise_level, noise_level])
+    noisy_pattern = np.where(noise == 1, -noisy_pattern, noisy_pattern)
+    pattern = noisy_pattern.copy()
+    return np.array(pattern)
+
 # Generar el patrón de la letra A y los patrones con ruido
 A_pattern = generate_letter_A()
-noisy_patterns = generate_noisy_patterns(A_pattern, num_patterns=50, noise_level=0.05) #Caso positivo
-#noisy_patterns = generate_noisy_patterns(A_pattern, num_patterns=50, noise_level=0.4) #forzar falla
-#noisy_patterns = generate_noisy_patterns(A_pattern, num_patterns=200, noise_level=0.1) #forzar falla
+#noisy_patterns = generate_noisy_patterns(A_pattern, num_patterns=50, noise_level=0.1) #Caso positivo
+noisy_patterns = generate_noisy_patterns(A_pattern, num_patterns=50, noise_level=0.1) #forzar falla
 
 # Entrenar la red con los patrones ruidosos
 hopfield_net.train(noisy_patterns)
 
 # Tomar uno de los patrones de entrenamiento con ruido
-test_pattern = noisy_patterns[0].copy()
+#test_pattern = noisy_patterns[0].copy() metodo anterior
+
+test_pattern = generated_random_pattern(A_pattern, noise_level=0.1)
 
 # Mostrar el patrón inicial
 plt.subplot(1, 2, 1)
 plt.title("Patrón inicial")
-plt.imshow(test_pattern.reshape((10, 10)), cmap="gray")
+plt.imshow(test_pattern.reshape((10, 10)), cmap="viridis")
 
 # Recuperar el patrón usando la red de Hopfield
 output_pattern = hopfield_net.predict(test_pattern, max_iterations=200)
@@ -74,7 +83,7 @@ output_pattern = hopfield_net.predict(test_pattern, max_iterations=200)
 # Mostrar el patrón recuperado
 plt.subplot(1, 2, 2)
 plt.title("Patrón recuperado")
-plt.imshow(output_pattern.reshape((10, 10)), cmap="gray")
+plt.imshow(output_pattern.reshape((10, 10)), cmap="viridis")
 plt.show()
 
 

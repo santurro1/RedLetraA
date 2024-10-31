@@ -141,11 +141,11 @@ print("Tamaño: ", tamano)
 Pattern_Test = noisy_patterns[num_rand].copy()
 
 # Agarramos un pater de prueba
-test_pattern = generated_random_pattern(Pattern_Test, noise_level=0.01).flatten()
+#test_pattern = generated_random_pattern(Pattern_Test, noise_level=0.01).flatten()
 
 # Ejemplo de uso:
-"""test_letter = 'E'  # Cambia esta letra por la que quieras probar (que no sea A, B o C)
-test_pattern = generate_letter_pattern(test_letter)"""
+test_letter = 'F'  # Cambia esta letra por la que quieras probar (que no sea A, B o C)
+test_pattern = generate_letter_pattern(test_letter)
 
 # Mostrar el patrón inicial
 plt.subplot(1, 2, 1)  # Crea un subplot (1 fila, 2 columnas, posición 1) para mostrar el patrón inicial.
